@@ -1,0 +1,8 @@
+pandas==1.5.3
+scikit-learn 
+seaborn
+matplotlib
+notebook
+mlflow
+sktime
+prophet

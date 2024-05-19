@@ -1,0 +1,18 @@
+---
+
+- name: Setup network
+  hosts: default
+  become: true
+  tasks:
+    - name: Copy network settings
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      with_items:
+        - { src: "/home/ural/network_setup/wp1/99_config.yaml", dest: "/etc/netplan/99_config.yaml"}
+    - name: Change hostname
+      command: sudo hostnamectl set-hostname wp1
+    - name: Apply config
+      command: sudo netplan apply 99
+    
+

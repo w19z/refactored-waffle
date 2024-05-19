@@ -1,0 +1,90 @@
+services:
+  app:
+    build: ./app
+    container_name: app
+    ports:
+      - "5005:5005"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      ENV PIP_ROOT_USER_ACTION: ignore
+    depends_on:
+      - db
+    volumes:
+      - ./data/dags:/app/data
+    networks:
+      - app-network
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.app
+  db:
+    image: postgres:13
+    command: ["postgres", "-c", "log_statement=mod"]
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - airflow-network
+      - app-network
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.db
+  airflow:
+    build: ./airflow
+    container_name: airflow
+    depends_on:
+      - db
+    environment:
+      _AIRFLOW_WWW_USER_PASSWORD: password
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor  # Use the LocalExecutor
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql://postgres:postgres@postgres/postgres
+      ENV PIP_ROOT_USER_ACTION: ignore
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data/dags:/opt/airflow/dags
+      - ./data/eda/data:/opt/airflow/data
+      - ./airflow/airflow.cfg:/opt/airflow/airflow.cfg
+    networks:
+      - airflow-network
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.airflow
+  jupyterhub:
+    build: ./jupyterhub
+    container_name: jupyterhub
+    environment:
+      ENV PIP_ROOT_USER_ACTION: ignore
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/eda:/home/admin/project_1
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.jupyter
+
+volumes:
+  data:
+
+networks:
+  airflow-network:
+  app-network:

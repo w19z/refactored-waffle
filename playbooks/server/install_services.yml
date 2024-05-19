@@ -1,0 +1,21 @@
+---
+
+- hosts: server
+  become: yes
+  tasks:
+    - name: Copy zipped project file to target
+      copy:
+        src: /home/ural/playbooks/server/server_app.zip
+        dest: /home/ural/server_app.zip
+
+    - name: Unzip project file
+      unarchive:
+        src: /home/ural/server_app.zip
+        dest: /home/ural
+        remote_src: yes
+
+    - name: Build and run Docker containers
+      command: sudo docker compose up
+      args:
+        chdir: /home/ural/server_app
+

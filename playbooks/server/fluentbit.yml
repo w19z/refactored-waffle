@@ -1,0 +1,19 @@
+
+---
+
+- name: Setup fluent-bit
+  hosts: server
+  become: true
+  tasks:
+    - name: Install Fluent-bit
+      shell: curl https://raw.githubusercontent.com/fluent/fluent-bit/master/install.sh | sh
+    - name: Set up config
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      with_items:
+        - { src: "/home/ural/playbooks/log/fluent-bit.conf", dest: "/etc/fluent-bit/fluent-bit.conf"}
+        - { src: "/home/ural/playbooks/log/upstream.conf", dest: "/home/ural/"}
+    - name: Start service
+      command: sudo systemctl start fluent-bit
+

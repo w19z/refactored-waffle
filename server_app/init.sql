@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS logs (
+  id SERIAL PRIMARY KEY,
+  timestamp TIMESTAMP,
+  ip_address VARCHAR(20),
+  http_method VARCHAR(20)
+);
+
+
+CREATE TABLE IF NOT EXISTS first_table (
+    id SERIAL PRIMARY KEY,
+    date DATE NOT NULL,
+    col1 FLOAT NOT NULL,
+    col2 FLOAT NOT NULL,
+    col3 FLOAT NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS second_table (
+    id SERIAL PRIMARY KEY,
+    col1 FLOAT NOT NULL,
+    col2 FLOAT NOT NULL
+);

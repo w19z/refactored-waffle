@@ -1,0 +1,14 @@
+---
+
+- hosts: server
+  become: yes
+  tasks:
+    - name: Initialize Airflow DB
+      command: docker exec -it airflow airflow db init
+
+    - name: Start Airflow scheduler
+      command: docker exec -d airflow airflow scheduler
+
+    - name: Add new Postgres connection to Airflow
+      command: >
+        docker exec -it airflow airflow connections add "postgres_new" --conn-type "postgres" --conn-login "postgres" --conn-password "postgres" --conn-host "db" --conn-schema "postgres" --conn-port "5432"
