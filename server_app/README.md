@@ -1,21 +1,11 @@
-# HW_3_mlops_xflow
-
-Домашнее задание № 3 "Автоматизация администрирования MLOps II"
-
-Описание:
-
-Инфраструктура для проекта машинного обучения на примере обработки временного ряда.
+# mlops_xflow
 
 Сервисы:
 - app
 - apache airflow
-- mlflow
 - jupyterhub
 - postgres
 
-Перед запуском:
-
-- добавить в переменную для airflow ваш api ключ для tiingo (tiingo.com)
 
 Запуск:
 1. `docker compose up`
@@ -24,8 +14,7 @@
     - `airflow scheduler`
     - настроить postgres connection в airflow settings (all postgres, host: db)
 3. DAGs поместить в папку data/dags
-4. 'chmod 777 /home/admin/project_1' in jupyter app
-5. 'enable_xcom_pickling' in airflow.cfg
+4. 'enable_xcom_pickling' in airflow.cfg
 
 Credentials:
 - jupyterhub ('admin' - 'password)
