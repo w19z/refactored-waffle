@@ -36,15 +36,12 @@
 - Подготовить модели глубокого обучения для анализа логов `git clone https://github.com/w19z/logbert.git`
 - Настроить виртуальную среду в соответствии с инструкцией в репозитории;
 - После сбора логов, скачать файлы с собранными логами с ВМ logs в папку logbert/preprocessing/logs_out: docker.app, docker.db, docker.jupyter, wp1_sshd, wp2_sshd, sshd;
-
-Подготовить файл comb_structured.csv с помощью блокнота preprocessing.ipynb (logbert/preprocessing).
-
-4. Произвести обучение и тестирование моделей в соответсвии с инструкции logbert.
+- Подготовить файл comb_structured.csv с помощью блокнота preprocessing.ipynb (logbert/preprocessing);
+- Произвести обучение и тестирование моделей в соответсвии с инструкции logbert.
 Пример:
 ```
-cd logbert
-. venv/bin/activate
 cd logbert/custom
+. ../venv/bin/activate
 python data_process.py
 python loganomaly.py vocab
 # set [num_classes] = vocab in loganomaly.py
